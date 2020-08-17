@@ -19,7 +19,7 @@ export default createGlobalStyle`
     color: var(--black);
   }
 
-  ul {
+  li {
     list-style: none;
   }
 
