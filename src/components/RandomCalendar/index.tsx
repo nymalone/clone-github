@@ -1,6 +1,6 @@
 import React from 'react';
 import Heatmap from 'react-calendar-heatmap';
-import { subYears } from 'date-fns'; // subtrair anos
+import { subYears, isBefore, isSameDay, addDays } from 'date-fns'; // subtrair anos
 
 import { Container } from './styles';
 
@@ -10,17 +10,13 @@ const RandomCalendar: React.FC = () => {
   const startDate = subYears(new Date(), 1); // aqui eu subtraio 1 ano da data atual
   const endDate = new Date(); //dia de hoje! o mapa é de um ano atrás (startDate) até a data de hoje.
 
-  const values:  HeatmapValue[] = [];
-
-  values.push({date: new Date(), count: 3});
-
   return (
     <Container>
       <div className="wrapper">
         <Heatmap
           startDate={startDate}
           endDate={endDate}
-          values={[values]}
+          values={generateHeatmapValues(startDate, endDate)}
           gutterSize={3.5} // tamanho do quadradinho
           classForValue={(item: HeatmapValue) => {
             let clampledCount = 0;
@@ -40,5 +36,22 @@ const RandomCalendar: React.FC = () => {
     </Container>
   );
 }
+
+const generateHeatmapValues = (startDate: Date, endDate: Date) => {
+  const values:  HeatmapValue[] = [];
+
+  let currentDate = startDate;
+  // enquanto o dia atual for menor que o dia de fim vou manter o loop de dentro
+  // caso contrário ele chegue no dia final tbm vou manter o loop
+  while(isBefore(currentDate, endDate) || isSameDay(currentDate, endDate)) {
+    const count = Math.random() * 4;
+
+    values.push({ date: currentDate, count: Math.round(count) });
+
+    currentDate = addDays(currentDate, 1)
+  }
+
+  return values;
+};
 
 export default RandomCalendar;
