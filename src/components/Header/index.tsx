@@ -2,8 +2,14 @@ import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Container, GithubLogo, SearchForm} from './styles';
+import { ThemeName } from '../../styles/theme';
 
-const Header: React.FC = () => {
+interface Props {
+  themeName: ThemeName;
+  setThemeName: (newName: ThemeName) => void;
+}
+
+const Header: React.FC<Props> = ({ themeName, setThemeName }) => {
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
@@ -13,9 +19,14 @@ const Header: React.FC = () => {
     navigate('/' + search.toLowerCase().trim())
   }
 
+  function toggleTheme() {
+    // vou fazer uma condicional -> se o nome do tema ja for ligth eu vou trocar pra dark, se for dar vou trocar pra light
+    setThemeName(themeName === 'light' ? 'dark' : 'light');
+  }
+
   return (
     <Container>
-      <GithubLogo />
+      <GithubLogo onClick={toggleTheme} />
       <SearchForm onSubmit={handleSubmit}>
         <input
           placeholder="Enter username or Repo..."
